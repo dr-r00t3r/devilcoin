@@ -1,0 +1,15 @@
+    # with open("static/img/1.jpg", "rb") as image_from_buffer:
+    #     result = await message.answer_photo(
+    #         BufferedInputFile(
+    #             image_from_buffer.read(),
+    #             filename="1.jpg"
+    #         ),
+    #         caption="Изображение из буфера"
+    #
+    #     )
+    #     file_ids.append(result.photo[-1].file_id)
+    # markup_request = ReplyKeyboardMarkup(resize_keyboard=True).add(
+    #     KeyboardButton('Отправить свой контакт ☎️', request_contact=True)
+    # ).add(
+    #     KeyboardButton('Отправить свою локацию 🗺️', request_location=True)
+    # )
