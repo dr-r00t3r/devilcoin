@@ -1,9 +1,21 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+#sensetive data censoreship
+/core_coin/.env
+/envs
+/detail
+/commands
+.dockerignore
+.gitignore
+docker-compose-prod.yml
+docker-compose-stage.yml
+docker-compose.yml
+run_service.sh
+/dockerfiles
+
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
-/core_coin/.env
 # testing
 /coverage
 
