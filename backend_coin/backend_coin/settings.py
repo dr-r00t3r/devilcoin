@@ -10,39 +10,48 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-
-from datetime import timedelta
+import os
 from pathlib import Path
+from datetime import timedelta
+# from pathlib import Path
 from django.contrib.messages import constants as messages
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY", default="test")
+# SECRET_KEY = config("SECRET_KEY", default="test")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", cast=bool, default=True)
+# DEBUG = config("DEBUG", cast=bool, default=True)
 SHOW_DEBUGGER_TOOLBAR = config("SHOW_DEBUGGER_TOOLBAR", cast=bool, default=False)
 
-ALLOWED_HOSTS = config(
-    "ALLOWED_HOSTS",
-    cast=lambda v: [s.strip() for s in v.split(",")],
-    default="*",
-)
+# ALLOWED_HOSTS = config(
+#     "ALLOWED_HOSTS",
+#     cast=lambda v: [s.strip() for s in v.split(",")],
+#     default="*",
+# )
 
 COMINGSOON = config("COMINGSOON", cast=bool, default=False)
 # SECRET_KEY = "django-insecure-%=b5hu#thj1&(p=7&g@m)cbrzl)xa21ph@fy0ynx%0*pht4f^l"
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = "django-insecure-bi$&a39pb81+#-@z3++m#ttpg45k23ex+da(@*)pyx9tvoe)5c"
+
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
-# ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['dooone.ir', '2oone.ir', '185.206.93.65', 'north-rice.ir', '*']
 
 # Application definition
 
@@ -59,10 +68,11 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "django_filters",
-    "drf_yasg",
+    # "drf_yasg",
     "corsheaders",
 ]
-SITE_ID = config("SITE_ID", cast=int, default=1)
+# SITE_ID = config("SITE_ID", cast=int, default=1)
+# AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -74,8 +84,20 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
 ROOT_URLCONF = "backend_coin.urls"
+DEFAULT_HOST = 'www'
 
 TEMPLATES = [
     {
@@ -101,13 +123,25 @@ WSGI_APPLICATION = "backend_coin.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": config("DB_ENGINE", default="django.db.backends.postgresql"),
-        "NAME": config("DB_NAME", default="postgres"),
-        "USER": config("DB_USER", default="postgres"),
-        "PASSWORD": config("DB_PASS", default="postgres"),
-        "HOST": config("DB_HOST", default="db"),
-        "PORT": config("DB_PORT", cast=int, default=5432),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'devil_coin_db',
+    #     'USER': 'devil_coin_user_name',
+    #     'PASSWORD': 'my_devil_coin_db123456_password',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+    # }
+    # "default": {
+    #     "ENGINE": config("DB_ENGINE", default="django.db.backends.postgresql"),
+    #     "NAME": config("DB_NAME", default="postgres"),
+    #     "USER": config("DB_USER", default="postgres"),
+    #     "PASSWORD": config("DB_PASS", default="postgres"),
+    #     "HOST": config("DB_HOST", default="db"),
+    #     "PORT": config("DB_PORT", cast=int, default=5432),
+    # }
 }
 
 
@@ -132,12 +166,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
+GOOGLE_ANALYTICS_MODEL = True
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = config("TIME_ZONE", default="UTC")
+# TIME_ZONE = config("TIME_ZONE", default="UTC")
 
-# TIME_ZONE = "UTC"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -194,101 +229,101 @@ else:
     DEFAULT_FROM_EMAIL = config(
         "DEFAULT_FROM_EMAIL", default="infor@example.com")
 
-# security configs for production
-if config("USE_SSL_CONFIG", cast=bool, default=False):
-    # Https settings
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
-
-    # HSTS settings
-    SECURE_HSTS_SECONDS = 31536000  # 1 year
-    SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-
-    # more security settings
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
-    X_FRAME_OPTIONS = "SAMEORIGIN"
-    SECURE_REFERRER_POLICY = "strict-origin"
-    USE_X_FORWARDED_HOST = True
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-# restframework configurations
-REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-    ],
-}
-
-if config("DISABLE_BROWSEABLE_API", cast=bool, default=False):
-    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
-        "rest_framework.renderers.JSONRenderer",)
-
-# cors headers config
-CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:8000",
-#     "http://127.0.0.1:8000",
-
-# ]
-
-# swagger configs
-SHOW_SWAGGER = config("SHOW_SWAGGER", cast=bool, default=True)
-SWAGGER_SETTINGS = {
-    "USE_SESSION_AUTH": True,
-    "SECURITY_DEFINITIONS": [],
-    "LOGIN_URL": "rest_framework:login",
-    "LOGOUT_URL": "rest_framework:logout",
-    "REFETCH_SCHEMA_ON_LOGOUT": True,
-    "JSON_EDITOR": True,
-}
-
-# simple jwt settings
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
-    "UPDATE_LAST_LOGIN": False,
-}
-
-if config("FILE_DEBUGGER", cast=bool, default=True):
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "simple": {
-                "format": "%(levelname)s %(asctime)s %(name)s.%(funcName)s:%(lineno)s- %(message)s"
-            },
-        },
-        "handlers": {
-            "console": {
-                "class": "logging.StreamHandler",
-            },
-            "file": {
-                "level": "DEBUG",
-                "class": "logging.FileHandler",
-                "filename": "log.django",
-                "formatter": "simple",
-            },
-        },
-        "loggers": {
-            "django": {
-                "handlers": ["console", "file"],
-                "level": config("DJANGO_LOG_LEVEL", default="WARNING"),
-                "propagate": True,
-            },
-        },
-    }
-
-# django debug toolbar for docker usage
+# # security configs for production
+# if config("USE_SSL_CONFIG", cast=bool, default=False):
+#     # Https settings
+#     SESSION_COOKIE_SECURE = True
+#     CSRF_COOKIE_SECURE = True
+#     SECURE_SSL_REDIRECT = True
+#
+#     # HSTS settings
+#     SECURE_HSTS_SECONDS = 31536000  # 1 year
+#     SECURE_HSTS_PRELOAD = True
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#
+#     # more security settings
+#     SECURE_CONTENT_TYPE_NOSNIFF = True
+#     SECURE_BROWSER_XSS_FILTER = True
+#     X_FRAME_OPTIONS = "SAMEORIGIN"
+#     SECURE_REFERRER_POLICY = "strict-origin"
+#     USE_X_FORWARDED_HOST = True
+#     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+#
+# # restframework configurations
+# REST_FRAMEWORK = {
+#     "DEFAULT_PERMISSION_CLASSES": [
+#         "rest_framework.permissions.AllowAny",
+#     ],
+#     "DEFAULT_AUTHENTICATION_CLASSES": [
+#         "rest_framework_simplejwt.authentication.JWTAuthentication",
+#         "rest_framework.authentication.TokenAuthentication",
+#         "rest_framework.authentication.BasicAuthentication",
+#         "rest_framework.authentication.SessionAuthentication",
+#     ],
+# }
+#
+# if config("DISABLE_BROWSEABLE_API", cast=bool, default=False):
+#     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
+#         "rest_framework.renderers.JSONRenderer",)
+#
+# # cors headers config
+# CORS_ALLOW_ALL_ORIGINS = True
+# # CORS_ALLOWED_ORIGINS = [
+# #     "http://localhost:8000",
+# #     "http://127.0.0.1:8000",
+#
+# # ]
+#
+# # swagger configs
+# SHOW_SWAGGER = config("SHOW_SWAGGER", cast=bool, default=True)
+# SWAGGER_SETTINGS = {
+#     "USE_SESSION_AUTH": True,
+#     "SECURITY_DEFINITIONS": [],
+#     "LOGIN_URL": "rest_framework:login",
+#     "LOGOUT_URL": "rest_framework:logout",
+#     "REFETCH_SCHEMA_ON_LOGOUT": True,
+#     "JSON_EDITOR": True,
+# }
+#
+# # simple jwt settings
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+#     "ROTATE_REFRESH_TOKENS": False,
+#     "BLACKLIST_AFTER_ROTATION": False,
+#     "UPDATE_LAST_LOGIN": False,
+# }
+#
+# if config("FILE_DEBUGGER", cast=bool, default=True):
+#     LOGGING = {
+#         "version": 1,
+#         "disable_existing_loggers": False,
+#         "formatters": {
+#             "simple": {
+#                 "format": "%(levelname)s %(asctime)s %(name)s.%(funcName)s:%(lineno)s- %(message)s"
+#             },
+#         },
+#         "handlers": {
+#             "console": {
+#                 "class": "logging.StreamHandler",
+#             },
+#             "file": {
+#                 "level": "DEBUG",
+#                 "class": "logging.FileHandler",
+#                 "filename": "log.django",
+#                 "formatter": "simple",
+#             },
+#         },
+#         "loggers": {
+#             "django": {
+#                 "handlers": ["console", "file"],
+#                 "level": config("DJANGO_LOG_LEVEL", default="WARNING"),
+#                 "propagate": True,
+#             },
+#         },
+#     }
+#
+# # django debug toolbar for docker usage
 if SHOW_DEBUGGER_TOOLBAR:
     INSTALLED_APPS += [
         "debug_toolbar",
